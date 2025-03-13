@@ -1,0 +1,9 @@
+export const COLLECTION_SLUGS = {
+  BUSINESSES: 'businesses',
+  BUSINESS_DETAILS: 'business-details',
+  PRODUCTS: 'products',
+  MEDIA: 'media',
+} as const;
+
+// Create a type from the values
+export type CollectionSlug = typeof COLLECTION_SLUGS[keyof typeof COLLECTION_SLUGS];

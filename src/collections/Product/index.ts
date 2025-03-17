@@ -1,20 +1,24 @@
+import { adminOrBusinessUser } from '@/access/adminOrBusinessUser'
 import type { CollectionConfig } from 'payload'
 
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
-    useAsTitle: 'productName',
-    defaultColumns: ['productCode', 'productName', 'category', 'price', 'status'],
+    useAsTitle: 'name',
+    defaultColumns: ['code', 'name', 'category', 'price', 'status'],
     pagination: {
       defaultLimit: 10,
     },
   },
   access: {
     read: () => true,
+    create: adminOrBusinessUser,
+    update: adminOrBusinessUser,
+    delete: adminOrBusinessUser,
   },
   fields: [
     {
-      name: 'productCode',
+      name: 'code',
       type: 'text',
       required: true,
       unique: true,
@@ -23,7 +27,7 @@ export const Products: CollectionConfig = {
       },
     },
     {
-      name: 'productName',
+      name: 'name',
       type: 'text',
       required: true,
     },
@@ -46,11 +50,15 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'shortDescription',
+      type: 'richText',
+    },
+    {
       name: 'description',
       type: 'richText',
     },
     {
-      name: 'price',
+      name: 'unitPrice',
       type: 'number',
       required: true,
       min: 0,

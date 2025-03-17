@@ -1,17 +1,11 @@
+import { admin } from '@/access/admin'
 import type { CollectionConfig } from 'payload'
 
 export const Businesses: CollectionConfig<'businesses'> = {
   slug: 'businesses',
   admin: {
-    useAsTitle: 'businessName',
-    defaultColumns: [
-      'businessCode',
-      'businessName',
-      'headOfficeAddress',
-      'contactPhone',
-      'contactEmail',
-      'representative',
-    ],
+    useAsTitle: 'name',
+    defaultColumns: ['code', 'name', 'phone', 'email', 'representative'],
     pagination: {
       defaultLimit: 10,
       limits: [10, 25, 50, 100],
@@ -19,23 +13,72 @@ export const Businesses: CollectionConfig<'businesses'> = {
   },
   access: {
     read: () => true,
-    update: () => true,
-    create: () => true,
-    delete: () => true,
+    create: admin,
+    update: admin,
+    delete: admin,
   },
   fields: [
     {
-      name: 'businessDetails',
-      type: 'relationship',
-      relationTo: 'business-details',
-      required: true,
-      unique: true,
+      name: 'profilePicture',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
       admin: {
-        position: 'sidebar',
+        description: 'Business profile picture or logo',
       },
     },
     {
-      name: 'businessCode',
+      name: 'address',
+      type: 'group',
+      fields: [
+        {
+          name: 'line1',
+          type: 'text',
+          label: 'Address Line 1',
+        },
+        {
+          name: 'line2',
+          type: 'text',
+          label: 'Address Line 2',
+        },
+        {
+          name: 'city',
+          type: 'text',
+        },
+        {
+          name: 'state',
+          type: 'text',
+        },
+        {
+          name: 'zip',
+          type: 'text',
+          label: 'Postal Code',
+        },
+        {
+          name: 'country',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'website',
+      type: 'text',
+    },
+    {
+      name: 'phoneNumber',
+      type: 'number',
+    },
+    {
+      name: 'email',
+      type: 'email',
+    },
+    {
+      name: 'taxCode',
       type: 'text',
       required: true,
       unique: true,
@@ -44,14 +87,64 @@ export const Businesses: CollectionConfig<'businesses'> = {
       },
     },
     {
-      name: 'businessName',
+      name: 'about',
       type: 'text',
-      required: true,
+    },
+    {
+      name: 'achivement',
+      type: 'text',
+    },
+    {
+      name: 'history',
+      type: 'text',
     },
     {
       name: 'representative',
-      type: 'text',
-      required: true,
+      type: 'group',
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Name',
+        },
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Title',
+        },
+        {
+          name: 'phoneNumber',
+          type: 'number',
+        },
+        {
+          name: 'email',
+          type: 'email',
+        },
+      ],
+    },
+    {
+      name: 'branches',
+      type: 'array',
+      fields: [
+        {
+          name: 'branch',
+          type: 'group',
+          fields: [
+            {
+              name: 'address',
+              type: 'text',
+            },
+            {
+              name: 'phoneNumber',
+              type: 'number',
+            },
+            {
+              name: 'email',
+              type: 'email',
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'status',

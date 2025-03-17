@@ -1,7 +1,14 @@
+import { adminOrBusinessUser } from '@/access/adminOrBusinessUser'
 import { CollectionConfig } from 'payload'
 
 export const Packages: CollectionConfig = {
   slug: 'packages',
+  access: {
+    read: () => true,
+    create: adminOrBusinessUser,
+    update: adminOrBusinessUser,
+    delete: adminOrBusinessUser,
+  },
   admin: {
     useAsTitle: 'packageName',
     defaultColumns: ['packageCode', 'packageName', 'owner', 'status', 'deadline'],

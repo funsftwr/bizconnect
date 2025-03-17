@@ -73,7 +73,6 @@ export interface Config {
     categories: Category;
     users: User;
     businesses: Business;
-    'business-details': BusinessDetail;
     products: Product;
     packages: Package;
     redirects: Redirect;
@@ -102,7 +101,6 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     businesses: BusinessesSelect<false> | BusinessesSelect<true>;
-    'business-details': BusinessDetailsSelect<false> | BusinessDetailsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     packages: PackagesSelect<false> | PackagesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -391,6 +389,8 @@ export interface Category {
 export interface User {
   id: number;
   name?: string | null;
+  role: 'admin' | 'user';
+  business?: (number | null) | Business;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -401,6 +401,283 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "businesses".
+ */
+export interface Business {
+  id: number;
+  /**
+   * Business profile picture or logo
+   */
+  profilePicture?: (number | null) | Media;
+  address?: {
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zip?: string | null;
+    country?: string | null;
+  };
+  name: string;
+  website?: string | null;
+  phoneNumber?: number | null;
+  email?: string | null;
+  taxCode: string;
+  about?: string | null;
+  achivement?: string | null;
+  history?: string | null;
+  representative?: {
+    name?: string | null;
+    title?: string | null;
+    phoneNumber?: number | null;
+    email?: string | null;
+  };
+  branches?:
+    | {
+        branch?: {
+          address?: string | null;
+          phoneNumber?: number | null;
+          email?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  status: 'active' | 'inactive';
+  businessLines: {
+    line?: string | null;
+    id?: string | null;
+  }[];
+  products?: {
+    docs?: (number | Product)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  packages?: {
+    docs?: (number | Package)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  foundedDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  code: string;
+  name: string;
+  business: number | Business;
+  category: number | Category;
+  shortDescription?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  unitPrice: number;
+  /**
+   * E.g., each, kg, liter, hour, etc.
+   */
+  unit: string;
+  status?: ('active' | 'inactive') | null;
+  /**
+   * Upload multiple pictures of the product
+   */
+  pictures?:
+    | {
+        picture: number | Media;
+        isPrimary?: boolean | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  specifications?: {
+    type?: ('product' | 'service') | null;
+    productSpecs?:
+      | {
+          name: string;
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+    serviceProcess?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packages".
+ */
+export interface Package {
+  id: number;
+  /**
+   * Unique identifier for the package
+   */
+  packageCode: string;
+  packageName: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Business that owns this package
+   */
+  owner: number | Business;
+  createdDate?: string | null;
+  deadline: string;
+  /**
+   * Package price
+   */
+  price: number;
+  /**
+   * Upload related documents
+   */
+  documents?:
+    | {
+        document: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  bids?: {
+    docs?: (number | Bid)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  status: 'OPEN' | 'REVIEW' | 'CLOSE';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bids".
+ */
+export interface Bid {
+  id: number;
+  /**
+   * A descriptive title for this bid
+   */
+  title: string;
+  /**
+   * Business submitting this bid
+   */
+  bidder: number | Business;
+  /**
+   * Package this bid is for
+   */
+  package: number | Package;
+  status: 'OPEN' | 'REVIEW' | 'WIN' | 'FAIL';
+  /**
+   * Upload legal documents related to this bid
+   */
+  legalDocuments?:
+    | {
+        document: number | Media;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Upload capacity profile documents
+   */
+  capacityProfiles?:
+    | {
+        document: number | Media;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Upload technical documentation
+   */
+  technicalDocuments?:
+    | {
+        document: number | Media;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Upload financial documents
+   */
+  financialDocuments?:
+    | {
+        document: number | Media;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Additional notes about this bid
+   */
+  notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -745,268 +1022,6 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "bids".
- */
-export interface Bid {
-  id: number;
-  /**
-   * A descriptive title for this bid
-   */
-  title: string;
-  /**
-   * Business submitting this bid
-   */
-  bidder: number | Business;
-  /**
-   * Business that owns the package
-   */
-  packageOwner: number | Business;
-  /**
-   * Package this bid is for
-   */
-  package: number | Package;
-  status: 'OPEN' | 'REVIEW' | 'WIN' | 'FAIL';
-  /**
-   * Upload legal documents related to this bid
-   */
-  legalDocuments?:
-    | {
-        document: number | Media;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Upload capacity profile documents
-   */
-  capacityProfiles?:
-    | {
-        document: number | Media;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Upload technical documentation
-   */
-  technicalDocuments?:
-    | {
-        document: number | Media;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Upload financial documents
-   */
-  financialDocuments?:
-    | {
-        document: number | Media;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Additional notes about this bid
-   */
-  notes?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  createdAt: string;
-  updatedAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "businesses".
- */
-export interface Business {
-  id: number;
-  businessDetails: number | BusinessDetail;
-  businessCode: string;
-  businessName: string;
-  representative: string;
-  status: 'active' | 'inactive';
-  businessLines: {
-    line?: string | null;
-    id?: string | null;
-  }[];
-  products?: {
-    docs?: (number | Product)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  packages?: {
-    docs?: (number | Package)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  foundedDate?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "business-details".
- */
-export interface BusinessDetail {
-  id: number;
-  /**
-   * Business profile picture or logo
-   */
-  profilePicture?: (number | null) | Media;
-  name: string;
-  code: string;
-  address?: {
-    line1?: string | null;
-    line2?: string | null;
-    city?: string | null;
-    state?: string | null;
-    zip?: string | null;
-    country?: string | null;
-  };
-  website?: string | null;
-  phoneNumber?: string | null;
-  headOfficeAddress?: string | null;
-  contactPhone?: string | null;
-  contactEmail?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
- */
-export interface Product {
-  id: number;
-  productCode: string;
-  productName: string;
-  business: number | Business;
-  category: number | Category;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  price: number;
-  /**
-   * E.g., each, kg, liter, hour, etc.
-   */
-  unit: string;
-  status?: ('active' | 'inactive') | null;
-  /**
-   * Upload multiple pictures of the product
-   */
-  pictures?:
-    | {
-        picture: number | Media;
-        isPrimary?: boolean | null;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  specifications?: {
-    type?: ('product' | 'service') | null;
-    productSpecs?:
-      | {
-          name: string;
-          value: string;
-          id?: string | null;
-        }[]
-      | null;
-    serviceProcess?: {
-      root: {
-        type: string;
-        children: {
-          type: string;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "packages".
- */
-export interface Package {
-  id: number;
-  /**
-   * Unique identifier for the package
-   */
-  packageCode: string;
-  packageName: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Business that owns this package
-   */
-  owner: number | Business;
-  createdDate?: string | null;
-  deadline: string;
-  /**
-   * Package price
-   */
-  price: number;
-  /**
-   * Upload related documents
-   */
-  documents?:
-    | {
-        document: number | Media;
-        id?: string | null;
-      }[]
-    | null;
-  bids?: {
-    docs?: (number | Bid)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  status: 'OPEN' | 'REVIEW' | 'CLOSE';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1204,10 +1219,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'businesses';
         value: number | Business;
-      } | null)
-    | ({
-        relationTo: 'business-details';
-        value: number | BusinessDetail;
       } | null)
     | ({
         relationTo: 'products';
@@ -1421,7 +1432,6 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface BidsSelect<T extends boolean = true> {
   title?: T;
   bidder?: T;
-  packageOwner?: T;
   package?: T;
   status?: T;
   legalDocuments?:
@@ -1606,6 +1616,8 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
+  business?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1621,10 +1633,45 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "businesses_select".
  */
 export interface BusinessesSelect<T extends boolean = true> {
-  businessDetails?: T;
-  businessCode?: T;
-  businessName?: T;
-  representative?: T;
+  profilePicture?: T;
+  address?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        city?: T;
+        state?: T;
+        zip?: T;
+        country?: T;
+      };
+  name?: T;
+  website?: T;
+  phoneNumber?: T;
+  email?: T;
+  taxCode?: T;
+  about?: T;
+  achivement?: T;
+  history?: T;
+  representative?:
+    | T
+    | {
+        name?: T;
+        title?: T;
+        phoneNumber?: T;
+        email?: T;
+      };
+  branches?:
+    | T
+    | {
+        branch?:
+          | T
+          | {
+              address?: T;
+              phoneNumber?: T;
+              email?: T;
+            };
+        id?: T;
+      };
   status?: T;
   businessLines?:
     | T
@@ -1640,41 +1687,16 @@ export interface BusinessesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "business-details_select".
- */
-export interface BusinessDetailsSelect<T extends boolean = true> {
-  profilePicture?: T;
-  name?: T;
-  code?: T;
-  address?:
-    | T
-    | {
-        line1?: T;
-        line2?: T;
-        city?: T;
-        state?: T;
-        zip?: T;
-        country?: T;
-      };
-  website?: T;
-  phoneNumber?: T;
-  headOfficeAddress?: T;
-  contactPhone?: T;
-  contactEmail?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  productCode?: T;
-  productName?: T;
+  code?: T;
+  name?: T;
   business?: T;
   category?: T;
+  shortDescription?: T;
   description?: T;
-  price?: T;
+  unitPrice?: T;
   unit?: T;
   status?: T;
   pictures?:

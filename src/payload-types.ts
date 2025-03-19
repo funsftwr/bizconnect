@@ -612,7 +612,7 @@ export interface Bid {
   /**
    * Business submitting this bid
    */
-  bidder: number | Business;
+  business: number | Business;
   /**
    * Package this bid is for
    */
@@ -1431,7 +1431,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface BidsSelect<T extends boolean = true> {
   title?: T;
-  bidder?: T;
+  business?: T;
   package?: T;
   status?: T;
   legalDocuments?:

@@ -1,10 +1,27 @@
+import { adminOrBusinessUser } from '@/access/adminOrBusinessUser'
 import { CollectionConfig } from 'payload'
+
+const setBusiness = async ({ req, data }) => {
+  if (req.method === 'POST' && req.user && req.user.role != 'admin') {
+    return {
+      ...data,
+      business: req.user.business,
+    }
+  }
+  return data
+}
 
 export const Bids: CollectionConfig = {
   slug: 'bids',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['bidder', 'package', 'status', 'createdAt'],
+  },
+  access: {
+    read: () => true,
+    create: adminOrBusinessUser,
+    update: adminOrBusinessUser,
+    delete: adminOrBusinessUser,
   },
   fields: [
     {
@@ -16,7 +33,7 @@ export const Bids: CollectionConfig = {
       },
     },
     {
-      name: 'bidder',
+      name: 'business',
       type: 'relationship',
       relationTo: 'businesses',
       required: true,
@@ -54,7 +71,7 @@ export const Bids: CollectionConfig = {
           label: 'Failed',
         },
       ],
-      defaultValue: 'REVIEW',
+      defaultValue: 'OPEN',
       required: true,
       admin: {
         position: 'sidebar',
@@ -160,4 +177,7 @@ export const Bids: CollectionConfig = {
       defaultValue: () => new Date(),
     },
   ],
+  hooks: {
+    beforeChange: [setBusiness],
+  },
 }

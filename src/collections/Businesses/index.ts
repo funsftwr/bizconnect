@@ -1,4 +1,5 @@
 import { admin } from '@/access/admin'
+import slugify from 'slugify'
 import type { CollectionConfig } from 'payload'
 
 export const Businesses: CollectionConfig<'businesses'> = {
@@ -18,6 +19,24 @@ export const Businesses: CollectionConfig<'businesses'> = {
     delete: admin,
   },
   fields: [
+    {
+      name: 'slug',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeValidate: [
+          async ({ value, originalDoc, data }) => {
+            if (originalDoc && originalDoc.slug && data && !data.taxCode && !data.name) {
+              return originalDoc.slug
+            }
+            return value
+          },
+        ],
+      },
+    },
     {
       name: 'profilePicture',
       type: 'upload',
@@ -56,7 +75,7 @@ export const Businesses: CollectionConfig<'businesses'> = {
     },
     {
       name: 'phoneNumber',
-      type: 'number',
+      type: 'text',
     },
     {
       name: 'email',
@@ -99,7 +118,7 @@ export const Businesses: CollectionConfig<'businesses'> = {
         },
         {
           name: 'phoneNumber',
-          type: 'number',
+          type: 'text',
         },
         {
           name: 'email',
@@ -135,7 +154,7 @@ export const Businesses: CollectionConfig<'businesses'> = {
             },
             {
               name: 'phoneNumber',
-              type: 'number',
+              type: 'text',
             },
             {
               name: 'email',
@@ -203,4 +222,19 @@ export const Businesses: CollectionConfig<'businesses'> = {
       },
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ data }) => {
+        if (data.taxCode && data.name) {
+          const slugifiedName = slugify(data.name, {
+            lower: true,
+            strict: true,
+          })
+
+          data.slug = `${data.taxCode}-${slugifiedName}`
+        }
+        return data
+      },
+    ],
+  },
 }

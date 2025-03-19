@@ -408,6 +408,7 @@ export interface User {
  */
 export interface Business {
   id: number;
+  slug?: string | null;
   /**
    * Business profile picture or logo
    */
@@ -419,7 +420,7 @@ export interface Business {
   };
   name: string;
   website?: string | null;
-  phoneNumber?: number | null;
+  phoneNumber?: string | null;
   email?: string | null;
   taxCode: string;
   about?: string | null;
@@ -428,7 +429,7 @@ export interface Business {
   representative?: {
     name?: string | null;
     title?: string | null;
-    phoneNumber?: number | null;
+    phoneNumber?: string | null;
     email?: string | null;
   };
   branches?:
@@ -439,7 +440,7 @@ export interface Business {
             state?: string | null;
             street?: string | null;
           };
-          phoneNumber?: number | null;
+          phoneNumber?: string | null;
           email?: string | null;
         };
         id?: string | null;
@@ -1635,6 +1636,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "businesses_select".
  */
 export interface BusinessesSelect<T extends boolean = true> {
+  slug?: T;
   profilePicture?: T;
   address?:
     | T

@@ -69,7 +69,11 @@ export default buildConfig({
     },
   }),
   collections: [Pages, Bids, Posts, Media, Categories, Users, Businesses, Products, Packages],
-  cors: [getServerSideURL(), 'http://localhost:3000'].filter(Boolean),
+  cors: [
+    getServerSideURL(),
+    'http://localhost:3000',
+    'https://bizconnect-dev-b5fwgdf0h3h9cmcq.southeastasia-01.azurewebsites.net',
+  ].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     ...plugins,

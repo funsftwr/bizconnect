@@ -32,16 +32,6 @@ export const Businesses: CollectionConfig<'businesses'> = {
       type: 'group',
       fields: [
         {
-          name: 'line1',
-          type: 'text',
-          label: 'Address Line 1',
-        },
-        {
-          name: 'line2',
-          type: 'text',
-          label: 'Address Line 2',
-        },
-        {
           name: 'city',
           type: 'text',
         },
@@ -50,12 +40,7 @@ export const Businesses: CollectionConfig<'businesses'> = {
           type: 'text',
         },
         {
-          name: 'zip',
-          type: 'text',
-          label: 'Postal Code',
-        },
-        {
-          name: 'country',
+          name: 'street',
           type: 'text',
         },
       ],
@@ -91,7 +76,7 @@ export const Businesses: CollectionConfig<'businesses'> = {
       type: 'text',
     },
     {
-      name: 'achivement',
+      name: 'achievements',
       type: 'text',
     },
     {
@@ -132,7 +117,21 @@ export const Businesses: CollectionConfig<'businesses'> = {
           fields: [
             {
               name: 'address',
-              type: 'text',
+              type: 'group',
+              fields: [
+                {
+                  name: 'city',
+                  type: 'text',
+                },
+                {
+                  name: 'state',
+                  type: 'text',
+                },
+                {
+                  name: 'street',
+                  type: 'text',
+                },
+              ],
             },
             {
               name: 'phoneNumber',
@@ -171,7 +170,11 @@ export const Businesses: CollectionConfig<'businesses'> = {
       required: true,
       fields: [
         {
-          name: 'line',
+          name: 'name',
+          type: 'text',
+        },
+        {
+          name: 'code',
           type: 'text',
         },
       ],

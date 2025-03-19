@@ -413,12 +413,9 @@ export interface Business {
    */
   profilePicture?: (number | null) | Media;
   address?: {
-    line1?: string | null;
-    line2?: string | null;
     city?: string | null;
     state?: string | null;
-    zip?: string | null;
-    country?: string | null;
+    street?: string | null;
   };
   name: string;
   website?: string | null;
@@ -426,7 +423,7 @@ export interface Business {
   email?: string | null;
   taxCode: string;
   about?: string | null;
-  achivement?: string | null;
+  achievements?: string | null;
   history?: string | null;
   representative?: {
     name?: string | null;
@@ -437,7 +434,11 @@ export interface Business {
   branches?:
     | {
         branch?: {
-          address?: string | null;
+          address?: {
+            city?: string | null;
+            state?: string | null;
+            street?: string | null;
+          };
           phoneNumber?: number | null;
           email?: string | null;
         };
@@ -446,7 +447,8 @@ export interface Business {
     | null;
   status: 'active' | 'inactive';
   businessLines: {
-    line?: string | null;
+    name?: string | null;
+    code?: string | null;
     id?: string | null;
   }[];
   products?: {
@@ -1637,12 +1639,9 @@ export interface BusinessesSelect<T extends boolean = true> {
   address?:
     | T
     | {
-        line1?: T;
-        line2?: T;
         city?: T;
         state?: T;
-        zip?: T;
-        country?: T;
+        street?: T;
       };
   name?: T;
   website?: T;
@@ -1650,7 +1649,7 @@ export interface BusinessesSelect<T extends boolean = true> {
   email?: T;
   taxCode?: T;
   about?: T;
-  achivement?: T;
+  achievements?: T;
   history?: T;
   representative?:
     | T
@@ -1666,7 +1665,13 @@ export interface BusinessesSelect<T extends boolean = true> {
         branch?:
           | T
           | {
-              address?: T;
+              address?:
+                | T
+                | {
+                    city?: T;
+                    state?: T;
+                    street?: T;
+                  };
               phoneNumber?: T;
               email?: T;
             };
@@ -1676,7 +1681,8 @@ export interface BusinessesSelect<T extends boolean = true> {
   businessLines?:
     | T
     | {
-        line?: T;
+        name?: T;
+        code?: T;
         id?: T;
       };
   products?: T;

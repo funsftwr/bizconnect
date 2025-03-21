@@ -394,15 +394,13 @@ export interface Business {
   };
   branches?:
     | {
-        branch?: {
-          address?: {
-            city?: string | null;
-            state?: string | null;
-            street?: string | null;
-          };
-          phoneNumber?: string | null;
-          email?: string | null;
+        address?: {
+          city?: string | null;
+          state?: string | null;
+          street?: string | null;
         };
+        phoneNumber?: string | null;
+        email?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1574,19 +1572,15 @@ export interface BusinessesSelect<T extends boolean = true> {
   branches?:
     | T
     | {
-        branch?:
+        address?:
           | T
           | {
-              address?:
-                | T
-                | {
-                    city?: T;
-                    state?: T;
-                    street?: T;
-                  };
-              phoneNumber?: T;
-              email?: T;
+              city?: T;
+              state?: T;
+              street?: T;
             };
+        phoneNumber?: T;
+        email?: T;
         id?: T;
       };
   status?: T;

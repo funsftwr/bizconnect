@@ -131,36 +131,30 @@ export const Businesses: CollectionConfig<'businesses'> = {
       type: 'array',
       fields: [
         {
-          name: 'branch',
+          name: 'address',
           type: 'group',
           fields: [
             {
-              name: 'address',
-              type: 'group',
-              fields: [
-                {
-                  name: 'city',
-                  type: 'text',
-                },
-                {
-                  name: 'state',
-                  type: 'text',
-                },
-                {
-                  name: 'street',
-                  type: 'text',
-                },
-              ],
-            },
-            {
-              name: 'phoneNumber',
+              name: 'city',
               type: 'text',
             },
             {
-              name: 'email',
-              type: 'email',
+              name: 'state',
+              type: 'text',
+            },
+            {
+              name: 'street',
+              type: 'text',
             },
           ],
+        },
+        {
+          name: 'phoneNumber',
+          type: 'text',
+        },
+        {
+          name: 'email',
+          type: 'email',
         },
       ],
     },
